@@ -6,24 +6,37 @@ import { Row, Col, Image } from 'react-bootstrap';
 import ListGroup from 'react-bootstrap/ListGroup';
 import OperatingHours from './OperatingHours';
 import Rivew from './Rivew';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { RestaurantsData } from '../redux Action/rsstaurantlistAction';
+
 
 function RestaurantView() {
     const urlParams = useParams() // fetchin url id
     // console.log(urParams.id);
     // fetch array of data from api
-    const [RestaurantList, setRestaurant] = useState([])
-    const fetchData = async () => {
-        await fetch('/restaurants.json').then((response) => response.json() // api call
-            .then((data) => setRestaurant(data.restaurants)))
-    }
+    // const [RestaurantList, setRestaurant] = useState([])
+    // const fetchData = async () => {
+    //     await fetch('/restaurants.json').then((response) => response.json() // api call
+    //         .then((data) => setRestaurant(data.restaurants)))
+    // }
+
+    const dispatch = useDispatch()
+    // To get updated state from store 
+    const {restuarantList} = useSelector((state) => state.restlistReducer)
+    console.log(restuarantList)
+
+
     // fetch data on page loading
     useEffect(() => {
-        fetchData()
+
+        dispatch(RestaurantsData())
+        // fetchData()
     }, [])
     //  console.log(RestaurantList)
 
     // find restaurent using irlparam id
-    const restaurantView = RestaurantList.find(item => (
+    const restaurantView = restuarantList.find(item => (
         item.id == urlParams.id
     ))
     //console.log(restaurantView)
